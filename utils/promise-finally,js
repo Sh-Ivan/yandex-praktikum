@@ -1,0 +1,47 @@
+/*
+Promise.prototype.finally = function(fn) {
+  try {
+    const result = fn();
+    if (result) {
+      return result
+              .then(res => this
+                  .then(res => {
+                    return res}))
+              .catch(error => Promise.resolve(error))
+    }
+  }
+  catch(error) {
+    return Promise.resolve(error);
+  }	
+}
+*/
+
+Promise.prototype.finally = function (fn) {
+    return this.then((value) => {
+        return Promise.resolve(fn()).then(() => value)
+    }).catch((reason) => {
+        return Promise.resolve(fn())
+    })
+}
+
+const resolvedPromise1 = Promise.resolve()
+  .finally(() => console.log('cleanup'));
+
+ const rejectedPromise = Promise.reject('Error')
+  .catch(err => err)
+  .finally(() => console.log('cleanup'));
+
+const resolvedPromise = Promise.resolve(50)
+  .finally(() => Promise.resolve(42))
+  .then(result => console.log(result));
+
+
+  const promise = Promise.reject('Error')
+  .catch(err => err)
+  .finally(() => { throw 'foo1'; })
+  .catch(e => console.log(e))
+
+  const rejectedPromise2 = Promise.reject('Error')
+  .catch(err => err)
+  .finally(() => Promise.reject('foo2'))
+  .catch(e => console.log(e)); 
