@@ -26,13 +26,13 @@
   * @param {string|number} number
   * @returns {string|number}
   */
- const roman = (number: number | string | unknown): number | string => {
+ const roman = (number: number | string): number | string => {
    if (typeof number !== 'number' && typeof number !== 'string') {
     throw new Error(TYPE_ERROR);
    }
 
    let result: number | string; 
-   if (number.toString().search(/^[0-9]+$/) !== -1) {
+   if (number.toString().search(/^-?[0-9]+$/) !== -1) {
     let value = +number;
     result = '';
     if (value < 1 || value > 3999) {
@@ -82,7 +82,7 @@
  console.log(roman('MCMXC')) // 1990
  console.log(roman('2017')) // MMXVII
  console.log(isNaN(roman('xxxxx') as number)) // true
- console.log(isNaN(roman('iiii')as number)) // true
+ console.log(isNaN(roman('iiii') as number)) // true
  
  try {
    roman('19a04')
